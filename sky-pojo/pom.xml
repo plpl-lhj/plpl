@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- 继承父项目 -->
+    <parent>
+        <groupId>com.plpl</groupId>
+        <artifactId>sky</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <!-- 项目基本信息 -->
+    <artifactId>sky-pojo</artifactId>              <!-- 项目唯一标识 -->
+    <name>sky-pojo</name>                         <!-- 项目名称 -->
+    <description>苍穹外卖项目-POJO模块</description> <!-- 项目描述 -->
+
+    <!--
+        POJO模块依赖
+        POJO - Plain Old Java Object，简单的Java对象
+        包含：Entity(实体)、DTO(数据传输对象)、VO(视图对象)
+    -->
+    <dependencies>
+        <!--
+            SpringDoc OpenAPI - 接口文档注解
+            提供：@Schema注解，用于生成Swagger文档
+        -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+        </dependency>
+    </dependencies>
+</project>

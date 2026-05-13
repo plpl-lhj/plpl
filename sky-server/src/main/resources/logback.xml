@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+=============================================
+Logback日志配置文件
+=============================================
+
+【什么是Logback？】
+  - Spring Boot默认的日志框架
+  - 是log4j的升级版，性能更好
+  - 与slf4j-api配合使用
+
+【配置文件位置】
+  - 放在src/main/resources目录下
+  - 命名为logback.xml或logback-spring.xml
+  - 会被Spring Boot自动加载
+
+【日志级别（从低到高）】
+  - TRACE: 跟踪信息（最详细）
+  - DEBUG: 调试信息
+  - INFO:  一般信息
+  - WARN:  警告信息
+  - ERROR: 错误信息
+  - 只输出大于等于配置级别的日志
+
+【日志格式说明】
+  %d{yyyy-MM-dd HH:mm:ss.SSS} - 时间（年-月-日 时:分:秒.毫秒）
+  [%thread]                      - 线程名
+  %-5level                      - 日志级别（5个字符宽度，左对齐）
+  %logger{50}                   - 日志记录器名（最多50字符）
+  %msg                          - 日志消息
+  %n                            - 换行符
+=============================================
+-->
+<configuration>
+
+    <!-- ==========================================
+         Appender: 日志输出目的地
+         ========================================== -->
+
+    <!-- ==========================================
+         控制台输出（STDOUT）
+         ========================================== -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- 日志输出到控制台 -->
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--
+            日志格式模板：
+            2024-01-15 10:30:45.123 [http-nio-8080-exec-1] INFO  c.plpl.controller.EmpController - 分页查询员工
+            -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- ============================================
+         文件输出（FILE）- 支持滚动日志
+         ============================================ -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 滚动策略：按大小和时间滚动 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+
+            <!--
+            日志文件命名规则：
+            - %d{yyyy-MM-dd} - 按日期生成文件
+            - %i - 序号（当日志文件超过最大大小时，序号递增）
+
+            示例：
+            D:/tlias-2024-01-15-0.log
+            D:/tlias-2024-01-15-1.log  （超过10MB时）
+            D:/tlias-2024-01-16-0.log  （新的一天）
+            -->
+            <FileNamePattern>D:/sky-%d{yyyy-MM-dd}-%i.log</FileNamePattern>
+
+            <!-- 最多保留30天的历史日志文件 -->
+            <!-- 超出这个时间的日志文件会被自动删除 -->
+            <MaxHistory>30</MaxHistory>
+
+            <!-- 单个日志文件最大大小 -->
+            <!-- 超过此大小会创建新文件，序号+1 -->
+            <!-- 默认10MB，这里设置为10MB -->
+            <maxFileSize>10MB</maxFileSize>
+        </rollingPolicy>
+
+        <!-- 日志编码器 -->
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- ==========================================
+         Root: 根日志记录器
+         ========================================== -->
+    <!--
+    level="INFO" - 输出INFO及以上级别的日志
+    - 会匹配所有logger
+    - 子logger未配置时会继承此级别
+    -->
+    <root level="INFO">
+        <!-- 引用控制台输出appender -->
+        <appender-ref ref="STDOUT" />
+
+        <!-- 引用文件输出appender -->
+        <appender-ref ref="FILE" />
+    </root>
+
+    <!-- ==========================================
+         指定包的日志级别（可选）
+         ========================================== -->
+    <!--
+    示例：设置某个包的日志级别
+    <logger name="com.plpl.mapper" level="DEBUG" />
+    -->
+    <logger name="com.sky.controller" level="INFO" />
+    <logger name="com.sky.server" level="INFO" />
+</configuration>

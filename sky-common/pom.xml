@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- 继承父项目 -->
+    <parent>
+        <groupId>com.plpl</groupId>
+        <artifactId>sky</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <!-- 项目基本信息 -->
+    <artifactId>sky-common</artifactId>              <!-- 项目唯一标识 -->
+    <name>sky-common</name>                        <!-- 项目名称 -->
+    <description>苍穹外卖项目-公共模块</description>  <!-- 项目描述 -->
+
+    <!--
+        公共模块依赖
+        特点：仅包含基础功能，不涉及具体业务
+        可被其他模块依赖，共享公共代码
+    -->
+    <dependencies>
+        <!--
+            JJWT - Java JWT库
+            用于：生成JWT令牌、解析JWT令牌、验证签名
+            版本由父项目的dependencyManagement统一管理
+        -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+        </dependency>
+
+        <!--
+            Spring Boot Starter
+            提供：自动配置、日志(slf4j+logback)
+        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+
+        <!--
+            Argon2 JVM - 密码哈希库
+            Argon2是目前最安全的密码哈希算法(2015年PHC冠军)
+            用于：密码加密存储，比MD5/SHA更安全
+            特性：抗GPU/ASIC攻击、防侧信道
+        -->
+        <dependency>
+            <groupId>de.mkammerer</groupId>
+            <artifactId>argon2-jvm</artifactId>
+        </dependency>
+    </dependencies>
+</project>

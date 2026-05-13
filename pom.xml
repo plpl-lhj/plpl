@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Maven项目对象模型(POM)文件
+    pom.xml - Project Object Model，项目对象模型
+    用于描述Maven项目的基本信息、依赖、构建配置等
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <!-- POM模型版本，固定为4.0.0 -->
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--
+        父项目继承
+        spring-boot-starter-parent - Spring Boot父工程
+        作用：统一管理Spring Boot依赖版本、提供默认配置、插件管理
+    -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>4.0.6</version>
+        <relativePath/>
+    </parent>
+
+    <!-- 项目基本信息 -->
+    <groupId>com.plpl</groupId>           <!-- 组织id -->
+    <artifactId>sky</artifactId>           <!-- 项目唯一标识 -->
+    <version>0.0.1-SNAPSHOT</version>     <!-- 版本号，SNAPSHOT表示开发版 -->
+    <name>sky</name>                       <!-- 项目名称 -->
+    <description>苍穹外卖项目</description> <!-- 项目描述 -->
+    <!-- pom - 表示这是一个聚合项目，不能直接打包成jar/war -->
+    <packaging>pom</packaging>
+
+    <!--
+        模块聚合
+        将多个子模块组合成一个完整项目
+        子模块会自动继承父项目的依赖和插件配置
+    -->
+    <modules>
+        <module>sky-common</module>    <!-- 公共模块：工具类、常量、异常、配置属性 -->
+        <module>sky-pojo</module>       <!-- POJO模块：实体类、DTO、VO -->
+        <module>sky-server</module>     <!-- 服务模块：Controller、Service、Mapper -->
+    </modules>
+
+    <!--
+        属性配置
+        使用${变量名}引用，便于统一管理和修改
+    -->
+    <properties>
+        <!-- Java版本 -->
+        <java.version>25</java.version>
+        <!-- Lombok版本 - 简化POJO类的代码生成 -->
+        <lombok.version>1.18.40</lombok.version>
+        <!-- MyBatis Spring Boot Starter版本 - ORM框架 -->
+        <mybatis.version>4.0.0</mybatis.version>
+        <!-- MySQL驱动版本 -->
+        <mysql-j.version>9.3.0</mysql-j.version>
+        <!-- JJWT版本 - Java JWT库，用于生成和验证JSON Web Token -->
+        <jjwt.version>0.13.0</jjwt.version>
+        <!-- SpringDoc OpenAPI版本 - 自动生成Swagger接口文档 -->
+        <openapi.version>3.0.0</openapi.version>
+        <!-- Argon2 JVM版本 - 最安全的密码哈希算法 -->
+        <argon2.version>2.11</argon2.version>
+        <!-- PageHelper版本 - MyBatis分页插件 -->
+        <pagehelper.version>2.1.0</pagehelper.version>
+    </properties>
+
+    <!--
+        全局依赖
+        注：这里只放编译器需要的依赖，具体依赖由子模块显式声明
+    -->
+    <dependencies>
+        <!--
+            Lombok - 简化代码的注解库
+            provided - 编译时需要，但运行时由容器提供(IDE、编译器需要)
+        -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <!--
+        依赖版本管理
+        dependencyManagement - 只声明版本，不实际引入依赖
+        子模块需要显式声明依赖，但不需要指定版本
+    -->
+    <dependencyManagement>
+        <dependencies>
+            <!--
+                MyBatis Spring Boot Starter
+                简化MyBatis与Spring Boot集成
+                提供：自动配置、SqlSessionFactory、Mapper扫描
+            -->
+            <dependency>
+                <groupId>org.mybatis.spring.boot</groupId>
+                <artifactId>mybatis-spring-boot-starter</artifactId>
+                <version>${mybatis.version}</version>
+            </dependency>
+
+            <!--
+                MySQL JDBC驱动
+                runtime - 编译时不需要，运行时由容器提供
+                用于：数据库连接、数据访问
+            -->
+            <dependency>
+                <groupId>com.mysql</groupId>
+                <artifactId>mysql-connector-j</artifactId>
+                <version>${mysql-j.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+
+            <!--
+                SpringDoc OpenAPI (原Swagger)
+                自动生成OpenAPI 3.0规范的接口文档
+                访问地址：/swagger-ui/index.html
+            -->
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>${openapi.version}</version>
+            </dependency>
+
+            <!--
+                JJWT - Java JWT库
+                用于：生成JWT令牌、解析JWT令牌、验证签名
+            -->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+
+            <!--
+                Argon2 JVM - 密码哈希库
+                Argon2是目前最安全的密码哈希算法(2015年PHC冠军)
+                用于：密码加密存储，比MD5/SHA更安全
+            -->
+            <dependency>
+                <groupId>de.mkammerer</groupId>
+                <artifactId>argon2-jvm</artifactId>
+                <version>${argon2.version}</version>
+            </dependency>
+
+            <!--
+                PageHelper - MyBatis分页插件
+                提供：自动分页、PageInfo、PageHelper.startPage()
+            -->
+            <dependency>
+                <groupId>com.github.pagehelper</groupId>
+                <artifactId>pagehelper-spring-boot-starter</artifactId>
+                <version>${pagehelper.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <!--
+        构建配置
+        plugins - 使用的Maven插件
+    -->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <!--
+                        注解处理器路径
+                        指定Lombok注解处理器，确保编译时正确处理Lombok注解
+                    -->
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

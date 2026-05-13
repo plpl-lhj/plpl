@@ -1,0 +1,49 @@
+# springboot基础配置
+spring:
+  # 应用名称
+  application:
+    name: sky-server
+  #数据库配置
+  datasource:
+    # MySQL驱动类
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # JDBC连接地址
+    # 格式: jdbc:mysql://主机:端口/数据库名?参数
+    # localhost:3306 - MySQL在本机3306端口
+    # sky_take_out - 数据库名称
+    # useUnicode=true&characterEncoding=UTF-8 - 支持中文
+    # serverTimezone=Asia/Shanghai - 设置时区
+    # zeroDateTimeBehavior=convertToNull - 将0000-00-00 日期转为 null，避免java报错
+    # useSSL=false - 禁用 SSL 加密连接
+    # allowPublicKeyRetrieval=true - 允许客户端从服务器获取公钥
+    url: jdbc:mysql://localhost:3306/sky_take_out?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+    # 数据库用户名
+    username: root
+    # 数据库密码
+    password: 142536
+
+# mybatis配置
+mybatis:
+  # XML映射文件存放路径
+  mapper-locations: classpath:mapper/*.xml
+  # 实体类别名包扫描 - XML中可以使用简短的类名代替全限定名
+  type-aliases-package: com.sky.entity
+  configuration:
+    # 日志实现 - 将执行的SQL输出到控制台
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    # 开启驼峰命名自动映射 - create_time->createTime
+    map-underscore-to-camel-case: true
+
+logging:
+  # 事务管理器日志级别
+  level:
+    org.springframework.jdbc.support.JdbcTransactionManager: debug
+
+sky:
+  jwt:
+    # 设置Jwt签名加密时使用的秘钥
+    admin-secret-key: plpl-liuhoajie-sky-2004-07-04-2026-05-08
+    # 设置Jwt过期时间
+    admin-ttl: 7200000
+    # 设置前端传递过来的令牌名称
+    admin-token-name: token
