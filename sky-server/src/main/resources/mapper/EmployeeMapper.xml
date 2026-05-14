@@ -88,8 +88,7 @@
         WHERE id = #{id}
     </update>
 
-    <!-- 根据id查询员工 -->
     <select id="getById" resultType="Employee">
-        select * from employee where id = #{id}
+        SELECT * FROM employee WHERE id = #{id}
     </select>
 </mapper>

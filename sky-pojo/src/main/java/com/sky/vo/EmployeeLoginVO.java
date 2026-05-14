@@ -10,8 +10,6 @@ import java.io.Serializable;
 
 /**
  * 员工登录返回的数据格式
- * VO：View Object，视图对象，用于返回给客户端的数据封装
- * @Schema - Swagger注解，description属性会显示在Swagger UI中
  */
 @Data
 @AllArgsConstructor

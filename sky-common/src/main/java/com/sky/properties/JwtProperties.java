@@ -6,10 +6,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * JWT配置属性类
- * @Component - 将该类标记为组件，纳入Spring管理
- * @ConfigurationProperties - 绑定配置文件中的属性
- *                           prefix指定前缀，Spring Boot会自动映射
- *                           例如：sky.jwt.admin-secret-key -> adminSecretKey
+ * @ConfigurationProperties(prefix = "sky.jwt") — 绑定配置文件中 sky.jwt 开头的属性
  */
 @Component
 @ConfigurationProperties(prefix = "sky.jwt")

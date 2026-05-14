@@ -67,7 +67,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         // employee.getPassword() - 哈希后的密码
         if (!PasswordUtil.verify(password, employee.getPassword())) {
             // 密码错误
-            log.error("密码错误: {}", password);
+            log.error("密码错误: {}", username);
             throw new PasswordErrorException(MessageConstant.PASSWORD_ERROR);
         }
 
@@ -90,8 +90,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void save(EmployeeInstantDTO dto) {
         // 1.获取当前时间和操作者id
-        LocalDateTime localDateTime = LocalDateTime.now();
-        Long id = Long.valueOf(BaseContext.getThreadLocal().get(BaseConstant.ID).toString());
+        LocalDateTime now = LocalDateTime.now();
+        Long userId = Long.valueOf(BaseContext.getThreadLocal().get(BaseConstant.ID).toString());
         BaseContext.removeThreadLocal();
 
         // 2.构造员工对象，DTO属性拷贝到实体
@@ -101,10 +101,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         // 3.补充默认字段：默认密码、启用状态、创建/更新时间和操作人
         employee.setPassword(PasswordUtil.hash(PasswordConstant.DEFAULT_PASSWORD));
         employee.setStatus(StatusConstant.ENABLE);
-        employee.setCreateTime(localDateTime);
-        employee.setUpdateTime(localDateTime);
-        employee.setCreateUser(id);
-        employee.setUpdateUser(id);
+        employee.setCreateTime(now);
+        employee.setUpdateTime(now);
+        employee.setCreateUser(userId);
+        employee.setUpdateUser(userId);
 
         // 4.调用mapper新增员工
         employeeMapper.save(employee);

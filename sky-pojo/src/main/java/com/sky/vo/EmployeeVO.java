@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 
 /**
  * 员工信息返回的数据格式（不含密码）
- * VO：View Object，视图对象，用于返回给客户端的数据封装
  */
 @Data
 @AllArgsConstructor

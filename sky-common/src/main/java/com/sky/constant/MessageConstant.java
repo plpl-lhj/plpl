@@ -15,5 +15,4 @@ public class MessageConstant {
     public static final String ALREADY_EXIST = "已存在";
     // 服务器错误
     public static final String UNKNOWN_ERROR = "服务器错误";
-
 }

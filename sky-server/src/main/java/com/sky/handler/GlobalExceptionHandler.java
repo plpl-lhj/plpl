@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.Objects;
 
-
 /**
  * 全局异常处理器
  * @RestControllerAdvice - 组合注解
@@ -47,7 +46,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BaseException.class)
     public Result handleBaseException(BaseException e) {
         log.error("异常信息: {}", e.getMessage());
-
         return Result.error(e.getMessage());
     }
 
@@ -58,8 +56,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public Result handleException(Exception e) {
-        // e.getMessage() - 获取异常信息
-        log.error("异常信息: {}", e);
+        log.error("异常信息: ", e);
         return Result.error(MessageConstant.UNKNOWN_ERROR);
     }
 }
