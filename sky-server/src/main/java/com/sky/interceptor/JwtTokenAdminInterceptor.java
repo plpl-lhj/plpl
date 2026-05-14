@@ -80,4 +80,14 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
             return false;
         }
     }
+
+    /**
+     * 请求完成后的清理工作
+     * afterCompletion - 在整个请求处理完成后调用（包括视图渲染后）
+     *                   用于释放资源，如清理ThreadLocal
+     */
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        BaseContext.removeThreadLocal();
+    }
 }

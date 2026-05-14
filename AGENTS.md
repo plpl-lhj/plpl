@@ -106,3 +106,30 @@ log.info("员工登录: {}", username);      // ✓
 log.info("员工登录:{}", username);        // ✗ 缺少空格
 log.info("分页查询员工,查询参数:{}", dto); // ✗ 中文逗号
 ```
+
+### In-file code style
+
+- **Constructor injection**: `private final` field + constructor, no `@Autowired`
+- **BeanUtils.copyProperties**: DTO → Entity or Entity → VO, never expose Entity directly in VO
+- **PageHelper**: `startPage()` must be immediately before the Mapper call, no queries in between
+- **ThreadLocal cleanup**: call `BaseContext.removeThreadLocal()` right after `getThreadLocal()`, in the same method
+- **Exception throwing**: throw specific subclass of `BaseException` (e.g. `AccountNotFoundException`), never raw `BaseException`
+- **Controller return**: always wrap in `Result.success()` or `Result.error()`, never return bare objects
+
+### MyBatis XML conventions
+
+- `namespace` must match the Mapper interface fully-qualified name
+- `resultType` uses type alias (`Employee` not `com.sky.entity.Employee`)
+- SQL keywords in uppercase: `SELECT`, `FROM`, `WHERE`, `INSERT INTO`, `UPDATE`, `ORDER BY`
+- `<if test>` for String: `!= null and != ''`; for other types: `!= null` only
+- `<where>` wraps optional filter conditions; `<set>` wraps dynamic update columns
+
+### Naming conventions
+
+- **Controller methods**: verb-based (`login`, `save`, `page`, `startOrStop`, `getById`, `update`)
+- **Service interface**: same as controller method names
+- **Mapper methods**: `getByUsername`, `save`, `page`, `update`, `getById`
+- **DTOs**: `*DTO` suffix (e.g. `EmployeeLoginDTO`, `EmployeeQueryDTO`)
+- **VOs**: `*VO` suffix (e.g. `EmployeeVO`, `EmployeeLoginVO`)
+- **Constants**: `*Constant` suffix, fields in `UPPER_SNAKE_CASE`
+- **Exceptions**: `*Exception` suffix, extending `BaseException`

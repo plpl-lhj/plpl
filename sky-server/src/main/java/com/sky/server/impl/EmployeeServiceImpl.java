@@ -92,7 +92,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         // 1.获取当前时间和操作者id
         LocalDateTime now = LocalDateTime.now();
         Long userId = Long.valueOf(BaseContext.getThreadLocal().get(BaseConstant.ID).toString());
-        BaseContext.removeThreadLocal();
 
         // 2.构造员工对象，DTO属性拷贝到实体
         Employee employee = new Employee();
@@ -176,11 +175,18 @@ public class EmployeeServiceImpl implements EmployeeService {
      */
     @Override
     public void update(EmployeeUpdateDTO dto) {
-        // 1.DTO属性拷贝到实体
+        // 1.获取当前操作者
+        Long userId = Long.valueOf(BaseContext.getThreadLocal().get(BaseConstant.ID).toString());
+
+        // 2.DTO属性拷贝到实体
         Employee employee = new Employee();
         BeanUtils.copyProperties(dto, employee);
 
-        // 2.调用mapper动态更新
+        // 3.补充审计字段
+        employee.setUpdateTime(LocalDateTime.now());
+        employee.setUpdateUser(userId);
+
+        // 4.调用mapper动态更新
         employeeMapper.update(employee);
     }
 }
