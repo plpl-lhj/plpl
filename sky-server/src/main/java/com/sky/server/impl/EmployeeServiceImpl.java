@@ -2,12 +2,10 @@ package com.sky.server.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.sky.constant.BaseConstant;
 import com.sky.constant.MessageConstant;
 import com.sky.constant.PasswordConstant;
 import com.sky.constant.StatusConstant;
-import com.sky.context.BaseContext;
-import com.sky.dto.EmployeeInstantDTO;
+import com.sky.dto.EmployeeInsertDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.dto.EmployeeQueryDTO;
 import com.sky.dto.EmployeeUpdateDTO;
@@ -24,13 +22,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
 /**
  * 员工服务实现类
- * @Service - 将该类标记为服务层组件，会被Spring扫描并注册到容器中
+ * @Service — 将该类标记为服务层组件，会被Spring扫描并注册到容器中
  *           与@Component功能相同，但语义更明确
  */
 @Service
@@ -88,24 +85,16 @@ public class EmployeeServiceImpl implements EmployeeService {
      * @param dto 新增时传递的用户名、姓名、手机号、性别、身份证号
      */
     @Override
-    public void save(EmployeeInstantDTO dto) {
-        // 1.获取当前时间和操作者id
-        LocalDateTime now = LocalDateTime.now();
-        Long userId = Long.valueOf(BaseContext.getThreadLocal().get(BaseConstant.ID).toString());
-
-        // 2.构造员工对象，DTO属性拷贝到实体
+    public void save(EmployeeInsertDTO dto) {
+        // 1.构造员工对象，DTO属性拷贝到实体
         Employee employee = new Employee();
         BeanUtils.copyProperties(dto, employee);
 
-        // 3.补充默认字段：默认密码、启用状态、创建/更新时间和操作人
+        // 2.补充默认字段：默认密码、启用状态
         employee.setPassword(PasswordUtil.hash(PasswordConstant.DEFAULT_PASSWORD));
         employee.setStatus(StatusConstant.ENABLE);
-        employee.setCreateTime(now);
-        employee.setUpdateTime(now);
-        employee.setCreateUser(userId);
-        employee.setUpdateUser(userId);
 
-        // 4.调用mapper新增员工
+        // 3.调用mapper新增员工（自动填充创建/更新时间、操作人）
         employeeMapper.save(employee);
     }
 
@@ -175,18 +164,11 @@ public class EmployeeServiceImpl implements EmployeeService {
      */
     @Override
     public void update(EmployeeUpdateDTO dto) {
-        // 1.获取当前操作者
-        Long userId = Long.valueOf(BaseContext.getThreadLocal().get(BaseConstant.ID).toString());
-
-        // 2.DTO属性拷贝到实体
+        // 1.DTO属性拷贝到实体
         Employee employee = new Employee();
         BeanUtils.copyProperties(dto, employee);
 
-        // 3.补充审计字段
-        employee.setUpdateTime(LocalDateTime.now());
-        employee.setUpdateUser(userId);
-
-        // 4.调用mapper动态更新
+        // 2.调用mapper动态更新（自动填充更新时间、操作人）
         employeeMapper.update(employee);
     }
 }

@@ -1,6 +1,6 @@
 package com.sky.server;
 
-import com.sky.dto.EmployeeInstantDTO;
+import com.sky.dto.EmployeeInsertDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.dto.EmployeeQueryDTO;
 import com.sky.dto.EmployeeUpdateDTO;
@@ -27,7 +27,7 @@ public interface EmployeeService {
      * 新增员工
      * @param dto 新增时传递的用户名、姓名、手机号、性别、身份证号
      */
-    void save(EmployeeInstantDTO dto);
+    void save(EmployeeInsertDTO dto);
 
     /**
      * 分页查询员工

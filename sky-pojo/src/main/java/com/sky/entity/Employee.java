@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -20,6 +21,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class Employee implements Serializable {
+    // serialVersionUID — 序列化版本号，用于反序列化时校验版本一致性
+    @Serial
     private static final long serialVersionUID = 1L;
     // 主键
     private Long id;

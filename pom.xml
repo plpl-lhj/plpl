@@ -62,6 +62,7 @@
         <argon2.version>2.11</argon2.version>
         <!-- PageHelper版本 - MyBatis分页插件 -->
         <pagehelper.version>2.1.0</pagehelper.version>
+        <aspectj.vesion>1.9.22.1</aspectj.vesion>
     </properties>
 
     <!--
@@ -151,6 +152,12 @@
                 <groupId>com.github.pagehelper</groupId>
                 <artifactId>pagehelper-spring-boot-starter</artifactId>
                 <version>${pagehelper.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjweaver</artifactId>
+                <version>${aspectj.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

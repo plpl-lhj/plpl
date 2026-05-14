@@ -13,9 +13,6 @@ import java.io.Serializable;
 @Data
 @Schema(description = "员工登录时传递的数据模型")
 public class EmployeeLoginDTO implements Serializable {
-    @Serial
-    private static final long serialVersionUID = 1L;
-
     // 用户名
     @Schema(description = "用户名")
     private String username;

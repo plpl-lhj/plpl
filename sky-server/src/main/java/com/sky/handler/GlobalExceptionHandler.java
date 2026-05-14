@@ -12,10 +12,14 @@ import java.util.Objects;
 
 /**
  * 全局异常处理器
- * @RestControllerAdvice - 组合注解
- *                        @ControllerAdvice + @ResponseBody
- *                        用于全局处理Controller层抛出的异常
- * @ExceptionHandler - 标注在方法上，用于声明处理哪种异常
+ * @RestControllerAdvice — 组合注解
+ *                         @ControllerAdvice + @ResponseBody
+ *                         ControllerAdvice用于全局拦截Controller异常
+ *                         ResponseBody使返回值直接写入响应体（JSON格式）
+ * @ExceptionHandler — 标注在方法上，声明当前方法处理哪种异常类型
+ *
+ * 处理顺序：Spring会匹配最具体的异常类型
+ * DuplicateKeyException → BaseException及其子类 → Exception（兜底）
  */
 @RestControllerAdvice
 @Slf4j
@@ -23,15 +27,16 @@ public class GlobalExceptionHandler {
 
     /**
      * 捕获数据库唯一键冲突异常（如用户名重复）
-     * DuplicateKeyException - Spring包装后的异常，需getRootCause()获取原始信息
+     * DuplicateKeyException — MyBatis/Spring对MySQL唯一约束冲突的包装异常
      */
     @ExceptionHandler(DuplicateKeyException.class)
     public Result handleDuplicateKeyException(DuplicateKeyException e) {
         log.error("异常信息: {}", e.getMessage());
 
-        // e.getRootCause() - 获取原始异常
+        // e.getRootCause() — 获取原始的MySQL异常信息（如"Duplicate entry 'xxx' for key"）
         String values = Objects.requireNonNull(e.getRootCause()).getMessage();
         if (values.contains("Duplicate entry")) {
+            // 按空格分割，第3个元素是重复的值
             String value = values.split(" ")[2];
             return Result.error(value + MessageConstant.ALREADY_EXIST);
         } else {
@@ -40,8 +45,7 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 捕获业务异常（继承BaseException的所有异常）
-     * 返回异常中的友好提示信息
+     * 捕获业务异常（继承BaseException的所有自定义异常）
      */
     @ExceptionHandler(BaseException.class)
     public Result handleBaseException(BaseException e) {
@@ -50,9 +54,7 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 捕获所有未处理的异常
-     * @param e 异常对象
-     * @return 返回错误信息
+     * 捕获所有未处理的异常（兜底处理器）
      */
     @ExceptionHandler(Exception.class)
     public Result handleException(Exception e) {

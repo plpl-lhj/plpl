@@ -11,7 +11,7 @@ import java.io.Serializable;
  */
 @Data
 @Schema(description = "新增员工时传递的数据模型")
-public class EmployeeInstantDTO implements Serializable {
+public class EmployeeInsertDTO implements Serializable {
     // 用户名
     @Schema(description = "用户名")
     private String username;

@@ -1,7 +1,7 @@
 package com.sky.controller.admin;
 
 import com.sky.constant.JwtClaimsConstant;
-import com.sky.dto.EmployeeInstantDTO;
+import com.sky.dto.EmployeeInsertDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.dto.EmployeeQueryDTO;
 import com.sky.dto.EmployeeUpdateDTO;
@@ -97,7 +97,7 @@ public class EmployeeController {
      */
     @PostMapping
     @Operation(summary = "新增员工")
-    public Result save(@RequestBody EmployeeInstantDTO dto) {
+    public Result save(@RequestBody EmployeeInsertDTO dto) {
         log.info("新增员工:{}", dto.getUsername());
 
         employeeService.save(dto);

@@ -1,7 +1,9 @@
 package com.sky.mapper;
 
+import com.sky.annotation.AutoFill;
 import com.sky.dto.EmployeeQueryDTO;
 import com.sky.entity.Employee;
+import com.sky.enumeration.OperationType;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -28,6 +30,7 @@ public interface EmployeeMapper {
      * 新增员工
      * @param employee 员工信息
      */
+    @AutoFill(OperationType.INSERT)
     void save(Employee employee);
 
     /**
@@ -41,6 +44,7 @@ public interface EmployeeMapper {
      * 动态更新员工信息（非null字段才会更新）
      * @param employee 员工信息
      */
+    @AutoFill(OperationType.UPDATE)
     void update(Employee employee);
 
     /**

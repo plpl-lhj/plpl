@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -18,6 +19,8 @@ import java.time.LocalDateTime;
 @Builder
 @Schema(description = "员工信息返回的数据格式")
 public class EmployeeVO implements Serializable {
+    // serialVersionUID — 序列化版本号，用于反序列化时校验版本一致性
+    @Serial
     private static final long serialVersionUID = 1L;
 
     // 主键值
