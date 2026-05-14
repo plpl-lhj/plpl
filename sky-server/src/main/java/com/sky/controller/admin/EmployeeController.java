@@ -9,7 +9,7 @@ import com.sky.entity.Employee;
 import com.sky.properties.JwtProperties;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
-import com.sky.server.EmployeeService;
+import com.sky.service.EmployeeService;
 import com.sky.utils.JwtUtil;
 import com.sky.vo.EmployeeLoginVO;
 import com.sky.vo.EmployeeVO;

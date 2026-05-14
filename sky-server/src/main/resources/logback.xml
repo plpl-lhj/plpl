@@ -111,5 +111,5 @@ Logback日志配置文件
     <logger name="com.plpl.mapper" level="DEBUG" />
     -->
     <logger name="com.sky.controller" level="INFO" />
-    <logger name="com.sky.server" level="INFO" />
+    <logger name="com.sky.service" level="INFO" />
 </configuration>

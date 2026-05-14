@@ -15,7 +15,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @Slf4j - Lombok注解，自动生成log对象，用于日志记录
  * WebMvcConfigurer - 实现该接口用于自定义Spring MVC配置
  */
-@Configuration
+// @Configuration
 @Slf4j
 public class WebMvcConfiguration implements WebMvcConfigurer {
     private final JwtTokenAdminInterceptor jwtTokenAdminInterceptor;

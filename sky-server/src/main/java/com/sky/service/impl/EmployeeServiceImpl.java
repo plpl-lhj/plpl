@@ -1,4 +1,4 @@
-package com.sky.server.impl;
+package com.sky.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -15,7 +15,7 @@ import com.sky.exception.AccountNotFoundException;
 import com.sky.exception.PasswordErrorException;
 import com.sky.mapper.EmployeeMapper;
 import com.sky.result.PageResult;
-import com.sky.server.EmployeeService;
+import com.sky.service.EmployeeService;
 import com.sky.utils.PasswordUtil;
 import com.sky.vo.EmployeeVO;
 import lombok.extern.slf4j.Slf4j;

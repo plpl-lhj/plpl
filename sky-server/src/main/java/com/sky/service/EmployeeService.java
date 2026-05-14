@@ -1,4 +1,4 @@
-package com.sky.server;
+package com.sky.service;
 
 import com.sky.dto.EmployeeInsertDTO;
 import com.sky.dto.EmployeeLoginDTO;

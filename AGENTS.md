@@ -38,7 +38,7 @@ mvn spring-boot:run -pl sky-server  # run dev server
 ## Architecture notes
 
 - Controllers in `com.sky.controller.admin/` (and likely `.user/` for future user-facing endpoints).
-- Service interface in `com.sky.server`, impl in `.server.impl`.
+- Service interface in `com.sky.service`, impl in `.server.impl`.
 - Mapper interfaces under `com.sky.mapper` are pure MyBatis (no JPA).
 - Exception hierarchy: `BaseException` → `AccountNotFoundException`, `PasswordErrorException`, `AccountLockedException`.
 - Global error handler `GlobalExceptionHandler` catches `DuplicateKeyException`, `BaseException`, and generic `Exception`.
