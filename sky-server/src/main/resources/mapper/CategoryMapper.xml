@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+    分类Mapper XML
+-->
 <mapper namespace="com.sky.mapper.CategoryMapper">
+
     <!-- 新增分类 -->
     <insert id="save">
         INSERT INTO category (type, name, sort, status, create_time, update_time, create_user, update_user)
-            VALUES (#{type}, #{name}, #{sort}, #{status}, #{createTime}, #{updateTime}, #{createUser}, #{updateUser})
+        VALUES (#{type}, #{name}, #{sort}, #{status}, #{createTime}, #{updateTime}, #{createUser}, #{updateUser})
     </insert>
 
     <!-- 分页查询分类 -->
@@ -22,12 +26,12 @@
         ORDER BY sort
     </select>
 
-    <!-- 根据id删除分类 -->
+    <!-- 根据ID删除分类 -->
     <delete id="deleteById">
         DELETE FROM category WHERE id = #{id}
     </delete>
 
-    <!-- 动态更新分类（非null字段才会更新） -->
+    <!-- 动态更新分类（非null字段才更新） -->
     <update id="update">
         UPDATE category
         <set>

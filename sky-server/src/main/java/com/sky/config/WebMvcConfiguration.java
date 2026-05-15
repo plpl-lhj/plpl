@@ -10,14 +10,16 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * 配置类，注册web相关组件
- * @Configuration - 标记该类为配置类，Spring会将其纳入Spring容器管理
- * @Slf4j - Lombok注解，自动生成log对象，用于日志记录
- * WebMvcConfigurer - 实现该接口用于自定义Spring MVC配置
+ * Web MVC配置类
+ * 实现WebMvcConfigurer接口，自定义Spring MVC配置
+ *
+ * @Configuration — 标记为配置类，Spring自动扫描注册
+ * @Slf4j         — Lombok注解，自动生成log日志对象
  */
 @Configuration
 @Slf4j
 public class WebMvcConfiguration implements WebMvcConfigurer {
+
     private final JwtTokenAdminInterceptor jwtTokenAdminInterceptor;
 
     public WebMvcConfiguration(JwtTokenAdminInterceptor jwtTokenAdminInterceptor) {
@@ -25,24 +27,23 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     }
 
     /**
-     * 注册Jwt令牌校验拦截器
+     * 注册JWT令牌校验拦截器
+     * 拦截/admin/**路径，排除登录接口
+     *
      * @param registry 拦截器注册表
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         log.info("开始注册jwt拦截器...");
-        // addInterceptor() - 添加拦截器实例
-        // addPathPatterns() - 设置拦截的路径，/**表示拦截所有路径
-        // excludePathPatterns() - 设置排除的路径，登录接口不需要拦截
         registry.addInterceptor(jwtTokenAdminInterceptor)
                 .addPathPatterns("/admin/**")
                 .excludePathPatterns("/admin/employee/login");
     }
 
     /**
-     * 通过springdoc生成接口文档
-     * @Bean - 将方法的返回值对象注册到Spring容器中
-     * OpenAPI - SpringDoc的OpenAPI配置对象，用于生成Swagger文档
+     * 配置OpenAPI文档信息
+     * 访问地址：/swagger-ui/index.html
+     *
      * @return OpenAPI配置对象
      */
     @Bean

@@ -13,13 +13,14 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Objects;
 
 /**
- * 文件上传
+ * 文件上传Controller
  */
 @Slf4j
 @RestController
 @RequestMapping("/admin/common")
 @Tag(name = "文件上传")
 public class UploadController {
+
     private final AliyunOSSOperator aliyunOSSOperator;
 
     public UploadController(AliyunOSSOperator aliyunOSSOperator) {
@@ -28,11 +29,12 @@ public class UploadController {
 
     /**
      * 文件上传
-     * @param file 前端上传的文件
+     *
+     * @param file 上传的文件
      * @return 文件访问URL
      */
-    @PostMapping("/upload")
     @Operation(summary = "文件上传")
+    @PostMapping("/upload")
     public Result<String> upload(MultipartFile file) throws Exception {
         log.info("文件上传: {}", file.getOriginalFilename());
 
@@ -42,8 +44,7 @@ public class UploadController {
         }
 
         String url = aliyunOSSOperator.upload(file.getBytes(), Objects.requireNonNull(file.getOriginalFilename()));
-
-        log.info("文件上传成功，URL: {}", url);
+        log.info("文件上传成功: {}", url);
 
         return Result.success(url);
     }

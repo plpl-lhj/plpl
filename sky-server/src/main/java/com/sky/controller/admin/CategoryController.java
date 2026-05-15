@@ -15,13 +15,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * 分类管理
+ * 分类管理Controller
  */
 @RestController
 @RequestMapping("/admin/category")
 @Slf4j
 @Tag(name = "分类管理")
 public class CategoryController {
+
     private final CategoryService categoryService;
 
     public CategoryController(CategoryService categoryService) {
@@ -30,88 +31,82 @@ public class CategoryController {
 
     /**
      * 新增分类
+     *
      * @param dto 分类信息
      */
-    @PostMapping
     @Operation(summary = "新增分类")
-    public Result save(@RequestBody CategoryInsertDTO dto) {
+    @PostMapping
+    public Result<Void> save(@RequestBody CategoryInsertDTO dto) {
         log.info("新增分类: {}", dto.getName());
-
         categoryService.save(dto);
-
         return Result.success();
     }
 
     /**
      * 分页查询分类
+     *
      * @param dto 查询条件
      * @return 分页结果
      */
-    @GetMapping("/page")
     @Operation(summary = "分页查询分类")
+    @GetMapping("/page")
     public Result<PageResult<Category>> page(CategoryQueryDTO dto) {
-        log.info("分页查询分类,查询参数: {}", dto);
-
+        log.info("分页查询分类: {}", dto);
         PageResult<Category> pageResult = categoryService.page(dto);
-
         return Result.success(pageResult);
     }
 
     /**
-     * 根据id删除分类
-     * @param id 分类id
+     * 根据ID删除分类
+     *
+     * @param id 分类ID
      */
-    @DeleteMapping
     @Operation(summary = "根据id删除分类")
-    public Result delete(Long id) {
+    @DeleteMapping
+    public Result<Void> delete(Long id) {
         log.info("删除分类: {}", id);
-
         categoryService.deleteById(id);
-
         return Result.success();
     }
 
     /**
      * 启用/禁用分类
+     *
      * @param status 目标状态（1启用，0禁用）
-     * @param id 分类id
+     * @param id     分类ID
      */
-    @PostMapping("/status/{status}")
     @Operation(summary = "修改分类状态")
-    public Result startOrStop(@PathVariable Integer status, Long id) {
-        log.info("修改分类状态,id: {},状态: {}", id, status);
-
+    @PostMapping("/status/{status}")
+    public Result<Void> startOrStop(@PathVariable Integer status, Long id) {
+        log.info("修改分类状态: {}, id: {}", id, status);
         categoryService.startOrStop(id, status);
-
         return Result.success();
     }
 
     /**
      * 修改分类
-     * @param dto 要修改的分类数据
+     *
+     * @param dto 分类信息（ID必填）
      */
-    @PutMapping
     @Operation(summary = "修改分类")
-    public Result update(@RequestBody CategoryUpdateDTO dto) {
+    @PutMapping
+    public Result<Void> update(@RequestBody CategoryUpdateDTO dto) {
         log.info("修改分类: {}", dto.getId());
-
         categoryService.update(dto);
-
         return Result.success();
     }
 
     /**
      * 根据类型查询分类列表
+     *
      * @param type 类型（1菜品分类，2套餐分类）
      * @return 分类列表
      */
-    @GetMapping("/list")
     @Operation(summary = "根据类型查询分类列表")
+    @GetMapping("/list")
     public Result<List<Category>> getByTypes(Integer type) {
         log.info("根据类型查询分类: {}", type);
-
         List<Category> categoryList = categoryService.getByTypes(type);
-
         return Result.success(categoryList);
     }
 }

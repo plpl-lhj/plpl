@@ -2,22 +2,24 @@ package com.sky;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.server.servlet.context.ServletComponentScan;
 
 /**
- * 启动类
- * @SpringBootApplication - 这是一个Spring Boot应用的入口注解
- * 它组合了以下三个注解：
- * - @Configuration：标记该类为配置类
- * - @EnableAutoConfiguration：启用自动配置
- * - @ComponentScan：扫描当前包及子包下的组件
+ * Spring Boot应用启动类
+ *
+ * @SpringBootApplication — 核心注解，组合了以下三个注解：
+ *   - @Configuration：标记为配置类
+ *   - @EnableAutoConfiguration：启用Spring Boot自动配置机制
+ *   - @ComponentScan：扫描当前包及子包下的@Component、@Service、@Controller等注解
  */
 @SpringBootApplication
 public class SkyServerApplication {
 
+    /**
+     * 应用入口方法
+     *
+     * @param args 命令行参数
+     */
     public static void main(String[] args) {
-        // 启动Spring Boot应用
         SpringApplication.run(SkyServerApplication.class, args);
     }
-
 }

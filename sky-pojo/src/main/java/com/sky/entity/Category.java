@@ -11,31 +11,41 @@ import java.time.LocalDateTime;
 
 /**
  * 分类实体类
+ * 对应数据库category表，支持菜品分类和套餐分类两种类型
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class Category implements Serializable {
-    // serialVersionUID — 序列化版本号，用于反序列化时校验版本一致性
+
     @Serial
     private static final long serialVersionUID = 1L;
-    // 主键
+
+    // 主键ID（数据库自增）
     private Long id;
-    // 类型（1菜品分类，2套餐分类）
+
+    // 分类类型（1:菜品分类 2:套餐分类）
     private Integer type;
+
     // 分类名称
     private String name;
-    // 排序号
+
+    // 排序号（数值越小越靠前）
     private Integer sort;
-    // 状态（1启用，0禁用）
+
+    // 启用状态（1:启用 0:禁用）
     private Integer status;
-    // 创建时间
+
+    // 记录创建时间（自动填充）
     private LocalDateTime createTime;
-    // 更新时间
+
+    // 记录最后更新时间（自动填充）
     private LocalDateTime updateTime;
-    // 创建人id
+
+    // 创建人ID（关联employee.id）
     private Long createUser;
-    // 更新人id
+
+    // 最后更新人ID（关联employee.id）
     private Long updateUser;
 }

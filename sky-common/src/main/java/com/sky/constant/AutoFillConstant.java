@@ -1,16 +1,21 @@
 package com.sky.constant;
 
 /**
- * 自动填充方法名常量
- * 避免在AutoFillAspect中硬编码字符串，集中管理便于修改
+ * 自动填充方法名常量类
+ * 定义实体类setter方法名，用于AutoFillAspect切面的反射调用
+ * 集中管理避免硬编码，便于维护
  */
 public class AutoFillConstant {
-    // 创建时间的setter方法名
+
+    /** setCreateTime方法名 */
     public static final String SET_CREATE_TIME = "setCreateTime";
-    // 更新时间的setter方法名
+
+    /** setUpdateTime方法名 */
     public static final String SET_UPDATE_TIME = "setUpdateTime";
-    // 创建人的setter方法名
+
+    /** setCreateUser方法名 */
     public static final String SET_CREATE_USER = "setCreateUser";
-    // 更新人的setter方法名
+
+    /** setUpdateUser方法名 */
     public static final String SET_UPDATE_USER = "setUpdateUser";
 }

@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+    菜品Mapper XML
+-->
 <mapper namespace="com.sky.mapper.DishMapper">
+
     <!-- 分页查询菜品 -->
     <select id="page" resultType="Dish">
         SELECT * FROM dish
@@ -19,7 +23,7 @@
         ORDER BY update_time DESC
     </select>
 
-    <!-- 动态更新菜品（非null字段才会更新） -->
+    <!-- 动态更新菜品（非null字段才更新） -->
     <update id="update">
         UPDATE dish
         <set>
@@ -57,13 +61,15 @@
         WHERE id = #{id}
     </update>
 
-    <!-- 新增菜品，useGeneratedKeys使用数据库自增主键，keyProperty将主键注入到Dish对象的id字段 -->
+    <!-- 新增菜品（返回自增主键） -->
     <insert id="save" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO dish (name, category_id, price, image, description, status, create_time, update_time, create_user, update_user)
-        VALUES (#{name}, #{categoryId}, #{price}, #{image}, #{description}, #{status}, #{createTime}, #{updateTime}, #{createUser}, #{updateUser})
+        INSERT INTO dish (name, category_id, price, image, description, status,
+                          create_time, update_time, create_user, update_user)
+        VALUES (#{name}, #{categoryId}, #{price}, #{image}, #{description}, #{status},
+                #{createTime}, #{updateTime}, #{createUser}, #{updateUser})
     </insert>
 
-    <!-- 根据id查询菜品（含分类名称和口味列表），LEFT JOIN关联分类和口味表 -->
+    <!-- 根据ID查询菜品详情（含分类名称和口味列表） -->
     <select id="getById" resultMap="dishGetByIdVOMap">
         SELECT
             d.id, d.name, d.category_id, d.price, d.image, d.description, d.status, d.update_time,
@@ -78,7 +84,7 @@
         WHERE d.id = #{id}
     </select>
 
-    <!-- 菜品详情结果映射，<collection>处理一对多关联（一个菜品→多个口味） -->
+    <!-- 菜品详情结果映射（一对多：菜品→口味） -->
     <resultMap id="dishGetByIdVOMap" type="com.sky.vo.DishGetByIdVO">
         <id column="id" property="id"/>
         <result column="name" property="name"/>
@@ -97,11 +103,16 @@
         </collection>
     </resultMap>
 
-    <!-- 根据id集合批量删除菜品 -->
+    <!-- 根据ID集合批量删除菜品 -->
     <delete id="deleteByIds">
         DELETE FROM dish WHERE id IN
         <foreach collection="ids" item="id" separator="," open="(" close=")">
             #{id}
         </foreach>
     </delete>
+
+    <!-- 根据分类ID查询菜品列表 -->
+    <select id="getByCategoryId" resultType="Dish">
+        SELECT * FROM dish WHERE category_id = #{id}
+    </select>
 </mapper>

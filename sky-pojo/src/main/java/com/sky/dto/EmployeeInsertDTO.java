@@ -6,28 +6,30 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * 新增员工时传递的数据模型
+ * 新增员工DTO
+ * 用于接收新增员工时的请求参数
  */
 @Data
-@Schema(description = "新增员工时传递的数据模型")
+@Schema(description = "新增员工请求参数")
 public class EmployeeInsertDTO implements Serializable {
-    // 用户名
-    @Schema(description = "用户名")
+
+    // 登录用户名（需唯一）
+    @Schema(description = "用户名", example = "zhangsan")
     private String username;
 
-    // 姓名
-    @Schema(description = "姓名")
+    // 员工姓名
+    @Schema(description = "姓名", example = "张三")
     private String name;
 
-    // 手机号
-    @Schema(description = "手机号")
+    // 联系电话
+    @Schema(description = "手机号", example = "13800138000")
     private String phone;
 
-    // 性别
-    @Schema(description = "性别")
+    // 性别（男/女）
+    @Schema(description = "性别", example = "男")
     private String sex;
 
-    // 身份证号
-    @Schema(description = "身份证号")
+    // 身份证号码
+    @Schema(description = "身份证号", example = "110101199001011234")
     private String idNumber;
 }

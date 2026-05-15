@@ -1,9 +1,11 @@
 package com.sky.constant;
 
 /**
- * 密码常量
+ * 密码常量类
+ * 定义密码相关的配置常量
  */
 public class PasswordConstant {
-    // 新增员工时的默认密码
+
+    /** 新增员工时的默认密码 */
     public static final String DEFAULT_PASSWORD = "123456";
 }

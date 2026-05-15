@@ -46,58 +46,59 @@ mvn spring-boot:run -pl sky-server  # run dev server
 
 ## Code & comment conventions
 
-### Tutorial comment rule — appear only once
+### 注解教程规则 — 每种只出现一次
 
-Each annotation / concept is explained in full **only in its first file**. All subsequent uses write standard Javadoc without tutorial.
+每个注解/概念在项目中**只在第一次出现的文件中详细解释**，后续使用只写简要说明。
 
-| Concept | First file (full tutorial) | Other files (concise only) |
-|---------|---------------------------|---------------------------|
-| @Data / @AllArgsConstructor / @NoArgsConstructor / @Builder | `Employee.java` | DTOs/VOs: class Javadoc only |
-| @Schema | `EmployeeLoginDTO.java` | Other DTOs/VOs: no @Schema tutorial |
-| DTO concept | `EmployeeLoginDTO.java` | Other DTOs: class Javadoc only |
-| VO concept | `EmployeeLoginVO.java` | Other VOs: class Javadoc only |
-| @Component | `JwtTokenAdminInterceptor.java` | `JwtProperties.java`: concise |
+| 注解/概念 | 首次出现文件（完整教程） | 其他文件（仅简述） |
+|----------|------------------------|-------------------|
+| @Data / @AllArgsConstructor / @NoArgsConstructor / @Builder | `Employee.java` | 其他Entity/DTO/VO：类Javadoc简述 |
+| @Schema | `EmployeeLoginDTO.java` | 其他DTO/VO：无@Schema教程 |
+| DTO概念 | `EmployeeLoginDTO.java` | 其他DTO：类Javadoc简述 |
+| VO概念 | `EmployeeLoginVO.java` | 其他VO：类Javadoc简述 |
+| @Component | `JwtTokenAdminInterceptor.java` | `JwtProperties.java`：简述 |
 | @Configuration / @Bean / WebMvcConfigurer | `WebMvcConfiguration.java` | — |
 | @RestController / @RequestMapping / HTTP mappings | `EmployeeController.java` | — |
 | @Service | `EmployeeServiceImpl.java` | — |
 | @Mapper | `EmployeeMapper.java` | — |
-| @Slf4j | `WebMvcConfiguration.java` | Others: no @Slf4j tutorial |
-| ThreadLocal | `BaseContext.java` | Usage sites: no re-explanation |
-| Serializable / Result wrapper | `Result.java` | Others: no re-explanation |
+| @Slf4j | `WebMvcConfiguration.java` | 其他：无@Slf4j教程 |
+| @Serial / Serializable | `Employee.java` | 其他：无教程 |
+| ThreadLocal | `BaseContext.java` | 使用处：无重复解释 |
+| Result封装 | `Result.java` | 其他：无重复解释 |
+| @Transactional | `DishServiceImpl.java` | 其他：简述 |
+| @AutoFill / @Aspect / @Before | `AutoFillAspect.java` | `AutoFill.java`：简述 |
+| @RestControllerAdvice / @ExceptionHandler | `GlobalExceptionHandler.java` | — |
 
-### Javadoc format
+### Javadoc格式规范
 
 ```java
-// 类 — 一行简述，首次出现的注解加教程说明
-/** 员工服务实现类
- * @Service — 标记为服务层组件，Spring自动扫描注册（首次出现）
- */
-@Service
-
-// 后续出现的同类注解 — 只写简述
-/** 员工Mapper接口 */
-@Mapper
-
-// 方法 — 简述 + @param + @return（不显然时省略@return）
 /**
- * 分页查询员工
- * @param dto 查询条件
- * @return 分页结果
+ * 类简述
+ * 详细说明（可选，首次出现时添加）
+ *
+ * @注解名 — 注解说明（仅首次出现时添加教程）
+ */
+@注解
+
+/**
+ * 方法简述
+ * 详细说明（可选，复杂逻辑时添加）
+ *
+ * @param 参数名 参数说明
+ * @return 返回值说明
  */
 
-// 字段 — // 注释 + @Schema
-// 用户名
-@Schema(description = "用户名")
-private String username;
+// 字段 — 单行注释说明用途
+private String fieldName;
 ```
 
-### Inline comments
+### 内联注释规范
 
-- Multi-step logic: `// 1. ...` → `// 2. ...` → `// 3. ...`
-- Single-line explanation: `// 简要说明`
-- API/method call explanation: only on first occurrence in project
+- 多步逻辑：`// 1. ...` → `// 2. ...` → `// 3. ...`
+- 单行说明：`// 简要说明`
+- 空行分隔：每个逻辑块之间空一行
 
-### Log format
+### 日志格式
 
 统一使用 `log.info/error("描述: {}", arg)` — 冒号后加空格：
 
@@ -107,29 +108,36 @@ log.info("员工登录:{}", username);        // ✗ 缺少空格
 log.info("分页查询员工,查询参数:{}", dto); // ✗ 中文逗号
 ```
 
-### In-file code style
+### 代码风格
 
-- **Constructor injection**: `private final` field + constructor, no `@Autowired`
-- **BeanUtils.copyProperties**: DTO → Entity or Entity → VO, never expose Entity directly in VO
-- **PageHelper**: `startPage()` must be immediately before the Mapper call, no queries in between
-- **ThreadLocal cleanup**: call `BaseContext.removeThreadLocal()` right after `getThreadLocal()`, in the same method
-- **Exception throwing**: throw specific subclass of `BaseException` (e.g. `AccountNotFoundException`), never raw `BaseException`
-- **Controller return**: always wrap in `Result.success()` or `Result.error()`, never return bare objects
+- **构造器注入**: `private final` 字段 + 构造函数，不使用 `@Autowired`
+- **属性拷贝**: BeanUtils.copyProperties(source, target)，DTO→Entity 或 Entity→VO
+- **分页**: `PageHelper.startPage()` 必须紧挨Mapper调用
+- **ThreadLocal清理**: 读取后立即调用 `removeThreadLocal()`
+- **异常抛出**: 抛出具体子类（如 `AccountNotFoundException`），不直接抛 `BaseException`
+- **Controller返回**: 统一包装为 `Result.success()` 或 `Result.error()`
 
-### MyBatis XML conventions
+### 变量命名规范
 
-- `namespace` must match the Mapper interface fully-qualified name
-- `resultType` uses type alias (`Employee` not `com.sky.entity.Employee`)
-- SQL keywords in uppercase: `SELECT`, `FROM`, `WHERE`, `INSERT INTO`, `UPDATE`, `ORDER BY`
-- `<if test>` for String: `!= null and != ''`; for other types: `!= null` only
-- `<where>` wraps optional filter conditions; `<set>` wraps dynamic update columns
+- **方法参数**: 使用语义化名称（如 `loginDTO`、`insertDTO`、`queryDTO`、`updateDTO`）
+- **局部变量**: 使用有意义的名称（如 `employeeList`、`flavorList`、`currentUserId`）
+- **常量**: 全大写下划线分隔（如 `SET_CREATE_TIME`、`DEFAULT_PASSWORD`）
+- **布尔变量**: 使用 `is/has/can` 前缀
 
-### Naming conventions
+### MyBatis XML规范
 
-- **Controller methods**: verb-based (`login`, `save`, `page`, `startOrStop`, `getById`, `update`)
-- **Service interface**: same as controller method names
-- **Mapper methods**: `getByUsername`, `save`, `page`, `update`, `getById`
-- **DTOs**: `*DTO` suffix (e.g. `EmployeeLoginDTO`, `EmployeeQueryDTO`)
-- **VOs**: `*VO` suffix (e.g. `EmployeeVO`, `EmployeeLoginVO`)
-- **Constants**: `*Constant` suffix, fields in `UPPER_SNAKE_CASE`
-- **Exceptions**: `*Exception` suffix, extending `BaseException`
+- `namespace` 必须与Mapper接口全限定名一致
+- `resultType` 使用类型别名（如 `Employee` 而非 `com.sky.entity.Employee`）
+- SQL关键字大写：`SELECT`、`FROM`、`WHERE`、`INSERT INTO`、`UPDATE`、`ORDER BY`
+- `<if test>` 字符串：`!= null and != ''`；其他类型：`!= null`
+- `<where>` 包裹可选过滤条件；`<set>` 包裹动态更新列
+
+### 命名约定
+
+- **Controller方法**: 动词形式（`login`、`save`、`page`、`startOrStop`、`getById`、`update`）
+- **Service接口**: 与Controller方法同名
+- **Mapper方法**: `getByUsername`、`save`、`page`、`update`、`getById`
+- **DTO类**: `*DTO` 后缀（如 `EmployeeLoginDTO`、`EmployeeQueryDTO`）
+- **VO类**: `*VO` 后缀（如 `EmployeeVO`、`EmployeeLoginVO`）
+- **常量类**: `*Constant` 后缀，字段 `UPPER_SNAKE_CASE`
+- **异常类**: `*Exception` 后缀，继承 `BaseException`

@@ -10,57 +10,51 @@ import java.util.Date;
 import java.util.Map;
 
 /**
- * Jwt令牌工具类
- * JWT组成：Header.Payload.Signature
- * - Header：包含算法和类型
- * - Payload：包含claims（用户信息）
+ * JWT令牌工具类
+ *
+ * JWT（JSON Web Token）组成：Header.Payload.Signature
+ * - Header：声明算法类型（如HS256）
+ * - Payload：携带Claims（用户身份信息）
  * - Signature：签名，防止数据被篡改
+ *
+ * 本项目使用HMAC-SHA256对称加密算法
  */
 @Slf4j
 public final class JwtUtil {
-    // 私有构造函数，防止实例化
+
     private JwtUtil() {
     }
 
     /**
-     * jwt令牌加密(生成token)
-     * @param secretKey 密钥，用于签名
-     * @param ttlMillis 过期时间(毫秒)
-     * @param claims 令牌中携带的用户信息
-     * @return 加密后的token字符串
+     * 生成JWT令牌
+     *
+     * @param secretKey 签名密钥（HMAC-SHA256算法要求）
+     * @param ttlMillis 过期时间（毫秒）
+     * @param claims    Payload中的声明数据
+     * @return JWT令牌字符串
      */
     public static String createJWT(String secretKey, long ttlMillis, Map<String, Object> claims) {
-        // 1. 指定签名的时候使用的签名算法
-        // HMAC-SHA256是对称加密算法，需要同一密钥进行签名和验证
-        long expMillis = System.currentTimeMillis() + ttlMillis;
-        Date exp = new Date(expMillis);
+        // 计算过期时间戳
+        long expirationMillis = System.currentTimeMillis() + ttlMillis;
+        Date expirationDate = new Date(expirationMillis);
 
-        // 2. 生成jwt令牌
-        // Jwts.builder() - JWT构建器
-        // signWith() - 设置签名算法和密钥
-        // Keys.hmacShaKeyFor() - 将字符串密钥转换为Key对象
-        // expiration() - 设置过期时间
-        // claims() - 设置payload中的数据
-        // compact() - 生成token字符串
+        // 构建并签名JWT令牌
         return Jwts.builder()
                 .signWith(Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8)))
-                .expiration(exp)
+                .expiration(expirationDate)
                 .claims(claims)
                 .compact();
     }
 
     /**
-     * jwt令牌解密(解析token)
-     * @param secretKey 密钥，用于验证签名
-     * @param token 令牌字符串
-     * @return 令牌中携带的用户信息(claims)
+     * 解析并验证JWT令牌
+     *
+     * @param secretKey 签名密钥（必须与生成时一致）
+     * @param token     JWT令牌字符串
+     * @return Claims声明对象（包含用户身份信息）
+     * @throws io.jsonwebtoken.JwtException 令牌无效或过期时抛出
      */
     public static Claims parseJWT(String secretKey, String token) {
-        // Jwts.parser() - 获取JWT解析器
-        // verifyWith() - 设置验证签名的密钥
-        // build() - 构建解析器
-        // parseSignedClaims() - 解析token并验证签名
-        // getPayload() - 获取payload中的claims
         return Jwts.parser()
                 .verifyWith(Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8)))
                 .build()

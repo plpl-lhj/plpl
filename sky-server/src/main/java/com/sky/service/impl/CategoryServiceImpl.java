@@ -22,107 +22,110 @@ import java.util.List;
 @Service
 @Slf4j
 public class CategoryServiceImpl implements CategoryService {
+
     private final CategoryMapper categoryMapper;
 
+    /**
+     * 构造函数注入Mapper
+     *
+     * @param categoryMapper 分类Mapper接口
+     */
     public CategoryServiceImpl(CategoryMapper categoryMapper) {
         this.categoryMapper = categoryMapper;
     }
 
     /**
      * 新增分类
-     * @param dto 分类信息
+     * 默认状态：禁用（需手动启用）
+     *
+     * @param insertDTO 分类信息
      */
     @Override
-    public void save(CategoryInsertDTO dto) {
-        log.info("新增分类: {}", dto.getName());
+    public void save(CategoryInsertDTO insertDTO) {
+        log.info("新增分类: {}", insertDTO.getName());
 
-        // 1.构造分类对象，DTO属性拷贝到实体
+        // 1. DTO → Entity
         Category category = new Category();
-        BeanUtils.copyProperties(dto, category);
+        BeanUtils.copyProperties(insertDTO, category);
 
-        // 2.补充默认状态（新增时默认禁用）
+        // 2. 设置默认状态
         category.setStatus(StatusConstant.DISABLE);
 
-        // 3.调用mapper新增分类（自动填充创建/更新时间、操作人）
+        // 3. 调用Mapper插入（自动填充审计字段）
         categoryMapper.save(category);
     }
 
     /**
      * 分页查询分类
-     * @param dto 查询条件
+     *
+     * @param queryDTO 查询条件
      * @return 分页结果
      */
     @Override
-    public PageResult<Category> page(CategoryQueryDTO dto) {
-        log.info("分页查询分类,查询参数: {}", dto);
+    public PageResult<Category> page(CategoryQueryDTO queryDTO) {
+        log.info("分页查询分类: {}", queryDTO);
 
-        // 1.PageHelper.startPage() 必须紧挨着Mapper查询方法
-        PageHelper.startPage(dto.getPage(), dto.getPageSize());
+        // 1. 设置分页参数
+        PageHelper.startPage(queryDTO.getPage(), queryDTO.getPageSize());
 
-        // 2.调用mapper得到查询结果
-        List<Category> categoryList = categoryMapper.page(dto);
+        // 2. 执行查询
+        List<Category> categoryList = categoryMapper.page(queryDTO);
+        Page<Category> pageData = (Page<Category>) categoryList;
 
-        // 3.PageHelper返回的List实际是Page类型，强转后可获取总记录数
-        Page<Category> page = (Page<Category>) categoryList;
-
-        return new PageResult<>(page.getTotal(), page.getResult());
+        return new PageResult<>(pageData.getTotal(), pageData.getResult());
     }
 
     /**
-     * 根据id删除分类
-     * @param id 分类id
+     * 根据ID删除分类
+     *
+     * @param categoryId 分类ID
      */
     @Override
-    public void deleteById(Long id) {
-        log.info("删除分类: {}", id);
-
-        categoryMapper.deleteById(id);
+    public void deleteById(Long categoryId) {
+        log.info("删除分类: {}", categoryId);
+        categoryMapper.deleteById(categoryId);
     }
 
     /**
      * 启用/禁用分类
-     * @param id 分类id
-     * @param status 目标状态（1启用，0禁用）
+     *
+     * @param categoryId 分类ID
+     * @param status     目标状态（1:启用 0:禁用）
      */
     @Override
-    public void startOrStop(Long id, Integer status) {
-        log.info("修改分类状态,id:{},状态:{}", id, status);
+    public void startOrStop(Long categoryId, Integer status) {
+        log.info("修改分类状态: {}, id: {}", categoryId, status);
 
-        // 1.将修改的分类id和状态封装
         Category category = Category.builder()
-                .id(id)
+                .id(categoryId)
                 .status(status)
                 .build();
-
-        // 2.调用mapper修改状态
         categoryMapper.update(category);
     }
 
     /**
      * 修改分类
-     * @param dto 要修改的分类数据
+     *
+     * @param updateDTO 分类信息（ID必填）
      */
     @Override
-    public void update(CategoryUpdateDTO dto) {
-        log.info("修改分类: {}", dto.getId());
+    public void update(CategoryUpdateDTO updateDTO) {
+        log.info("修改分类: {}", updateDTO.getId());
 
-        // 1.DTO属性拷贝到实体
         Category category = new Category();
-        BeanUtils.copyProperties(dto, category);
-
-        // 2.调用mapper动态更新（自动填充更新时间、操作人）
+        BeanUtils.copyProperties(updateDTO, category);
         categoryMapper.update(category);
     }
 
     /**
      * 根据类型查询分类列表
-     * @param type 类型（1菜品分类，2套餐分类）
+     *
+     * @param type 类型（1:菜品分类 2:套餐分类）
      * @return 分类列表
      */
     @Override
     public List<Category> getByTypes(Integer type) {
         log.info("根据类型查询分类列表: {}", type);
-
         return categoryMapper.getByTypes(type);
     }
 }

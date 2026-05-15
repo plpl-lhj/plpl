@@ -13,28 +13,33 @@ import java.util.List;
  */
 @Mapper
 public interface CategoryMapper {
+
     /**
      * 新增分类
+     *
      * @param category 分类信息
      */
     @AutoFill(OperationType.INSERT)
     void save(Category category);
 
     /**
-     * 分页查询分类（配合PageHelper使用）
+     * 分页查询分类（配合PageHelper）
+     *
      * @param dto 查询条件
      * @return 分类列表
      */
     List<Category> page(CategoryQueryDTO dto);
 
     /**
-     * 根据id删除分类
-     * @param id 分类id
+     * 根据ID删除分类
+     *
+     * @param id 分类ID
      */
     void deleteById(Long id);
 
     /**
      * 动态更新分类（非null字段才会更新）
+     *
      * @param category 分类信息
      */
     @AutoFill(OperationType.UPDATE)
@@ -42,6 +47,7 @@ public interface CategoryMapper {
 
     /**
      * 根据类型查询分类列表
+     *
      * @param type 类型（1菜品分类，2套餐分类）
      * @return 分类列表
      */

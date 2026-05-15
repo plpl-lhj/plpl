@@ -10,31 +10,35 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * 员工登录返回的数据格式
+ * 员工登录VO
+ *
+ * VO（View Object）— 视图对象，用于封装返回给前端的响应数据
+ * 设计原则：不暴露数据库完整字段（如password），只返回前端需要的字段
+ * 使用场景：Service层查询后转换为VO，Controller通过Result<VO>返回
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Schema(description = "员工登录返回的数据格式")
+@Schema(description = "员工登录响应数据")
 public class EmployeeLoginVO implements Serializable {
-    // serialVersionUID — 序列化版本号，用于反序列化时校验版本一致性
+
     @Serial
     private static final long serialVersionUID = 1L;
 
-    // 用户id
-    @Schema(description = "用户id")
+    // 员工ID
+    @Schema(description = "员工ID")
     private Long id;
 
-    // 用户名
+    // 登录用户名
     @Schema(description = "用户名")
     private String username;
 
-    // 姓名
+    // 员工姓名
     @Schema(description = "姓名")
     private String name;
 
-    // jwt令牌
-    @Schema(description = "jwt令牌")
+    // JWT访问令牌（前端需保存，后续请求携带在请求头中）
+    @Schema(description = "JWT访问令牌")
     private String token;
 }

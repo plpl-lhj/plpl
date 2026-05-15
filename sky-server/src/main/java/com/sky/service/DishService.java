@@ -13,8 +13,10 @@ import java.util.List;
  * 菜品服务接口
  */
 public interface DishService {
+
     /**
      * 分页查询菜品
+     *
      * @param dto 查询条件
      * @return 分页结果
      */
@@ -22,34 +24,46 @@ public interface DishService {
 
     /**
      * 启售/停售菜品
-     * @param id 菜品id
+     *
+     * @param id     菜品ID
      * @param status 目标状态（1启售，0停售）
      */
     void startOrStop(Long id, Integer status);
 
     /**
-     * 根据id查询菜品详情
-     * @param id 菜品id
+     * 根据ID查询菜品详情
+     *
+     * @param id 菜品ID
      * @return 菜品详情（含分类名称和口味列表）
      */
     DishGetByIdVO getById(Long id);
 
     /**
      * 新增菜品
-     * @param dto 菜品信息
-     * @return 新增菜品的id
+     *
+     * @param dto 菜品信息（含口味列表）
      */
     void save(DishInsertDTO dto);
 
     /**
      * 修改菜品
-     * @param dto 菜品信息
+     *
+     * @param dto 菜品信息（含口味列表）
      */
     void update(DishUpdateDTO dto);
 
     /**
      * 批量删除菜品
-     * @param ids 菜品id集合
+     *
+     * @param ids 菜品ID集合
      */
     void deleteByIds(List<Long> ids);
+
+    /**
+     * 根据分类ID查询菜品列表
+     *
+     * @param id 分类ID
+     * @return 菜品列表
+     */
+    List<Dish> getByCategoryId(Long id);
 }

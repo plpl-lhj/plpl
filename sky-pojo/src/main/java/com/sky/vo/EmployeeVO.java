@@ -11,31 +11,32 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * 员工信息返回的数据格式（不含密码）
+ * 员工信息VO
+ * 用于返回员工详细信息（不含密码字段）
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Schema(description = "员工信息返回的数据格式")
+@Schema(description = "员工信息响应数据")
 public class EmployeeVO implements Serializable {
-    // serialVersionUID — 序列化版本号，用于反序列化时校验版本一致性
+
     @Serial
     private static final long serialVersionUID = 1L;
 
-    // 用户id
-    @Schema(description = "用户id")
+    // 员工ID
+    @Schema(description = "员工ID")
     private Long id;
 
-    // 用户名
+    // 登录用户名
     @Schema(description = "用户名")
     private String username;
 
-    // 姓名
+    // 员工姓名
     @Schema(description = "姓名")
     private String name;
 
-    // 手机号
+    // 联系电话
     @Schema(description = "手机号")
     private String phone;
 
@@ -43,27 +44,27 @@ public class EmployeeVO implements Serializable {
     @Schema(description = "性别")
     private String sex;
 
-    // 身份证号
+    // 身份证号码
     @Schema(description = "身份证号")
     private String idNumber;
 
-    // 账号状态(1:启用, 0:禁用)
+    // 账号状态（1:启用 0:禁用）
     @Schema(description = "账号状态")
     private Integer status;
 
-    // 创建时间
+    // 记录创建时间
     @Schema(description = "创建时间")
     private LocalDateTime createTime;
 
-    // 更新时间
+    // 记录最后更新时间
     @Schema(description = "更新时间")
     private LocalDateTime updateTime;
 
-    // 创建人id
-    @Schema(description = "创建人id")
+    // 创建人ID
+    @Schema(description = "创建人ID")
     private Long createUser;
 
-    // 更新人id
-    @Schema(description = "更新人id")
+    // 最后更新人ID
+    @Schema(description = "更新人ID")
     private Long updateUser;
 }

@@ -6,17 +6,31 @@ import org.springframework.stereotype.Component;
 
 /**
  * JWT配置属性类
- * @ConfigurationProperties(prefix = "sky.jwt") — 绑定配置文件中 sky.jwt 开头的属性
+ * 绑定application.yml中sky.jwt开头的配置项
+ *
+ * @Component             — 注册为Spring组件
+ * @ConfigurationProperties — 将配置文件中的属性映射到Java对象
  */
 @Component
 @ConfigurationProperties(prefix = "sky.jwt")
 @Data
 public class JwtProperties {
-    // 1.管理端员工生成jwt令牌相关配置
-    // jwt签名加密时使用的秘钥
+
+    /**
+     * JWT签名密钥（用于HMAC-SHA256算法）
+     * 要求：足够长的随机字符串，建议32字符以上
+     */
     private String adminSecretKey;
-    // jwt过期时间(毫秒)
+
+    /**
+     * JWT过期时间（毫秒）
+     * 示例：7200000 = 2小时
+     */
     private long adminTtl;
-    // 前端传递过来的令牌名称
+
+    /**
+     * 请求头中的令牌名称
+     * 前端需在请求头中添加此名称的Header携带Token
+     */
     private String adminTokenName;
 }

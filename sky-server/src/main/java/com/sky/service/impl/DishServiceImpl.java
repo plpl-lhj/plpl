@@ -27,9 +27,16 @@ import java.util.List;
 @Service
 @Slf4j
 public class DishServiceImpl implements DishService {
+
     private final DishMapper dishMapper;
     private final DishFlavorMapper dishFlavorMapper;
 
+    /**
+     * 构造函数注入Mapper
+     *
+     * @param dishMapper       菜品Mapper接口
+     * @param dishFlavorMapper 菜品口味Mapper接口
+     */
     public DishServiceImpl(DishMapper dishMapper, DishFlavorMapper dishFlavorMapper) {
         this.dishMapper = dishMapper;
         this.dishFlavorMapper = dishFlavorMapper;
@@ -37,111 +44,128 @@ public class DishServiceImpl implements DishService {
 
     /**
      * 分页查询菜品
-     * @param dto 查询条件
+     *
+     * @param queryDTO 查询条件
      * @return 分页结果
      */
     @Override
-    public PageResult<Dish> page(DishQueryDTO dto) {
-        log.info("分页查询菜品,查询参数: {}", dto);
+    public PageResult<Dish> page(DishQueryDTO queryDTO) {
+        log.info("分页查询菜品: {}", queryDTO);
 
-        PageHelper.startPage(dto.getPage(), dto.getPageSize());
-        List<Dish> dishList = dishMapper.page(dto);
-        Page<Dish> page = (Page<Dish>) dishList;
+        PageHelper.startPage(queryDTO.getPage(), queryDTO.getPageSize());
+        List<Dish> dishList = dishMapper.page(queryDTO);
+        Page<Dish> pageData = (Page<Dish>) dishList;
 
-        return new PageResult<>(page.getTotal(), page.getResult());
+        return new PageResult<>(pageData.getTotal(), pageData.getResult());
     }
 
     /**
      * 启售/停售菜品
-     * @param id 菜品id
-     * @param status 目标状态（1启售，0停售）
+     *
+     * @param dishId 菜品ID
+     * @param status 目标状态（1:启售 0:停售）
      */
     @Override
-    public void startOrStop(Long id, Integer status) {
-        log.info("修改菜品状态,id: {},状态: {}", id, status);
+    public void startOrStop(Long dishId, Integer status) {
+        log.info("修改菜品状态: {}, id: {}", dishId, status);
 
         Dish dish = Dish.builder()
-                .id(id)
+                .id(dishId)
                 .status(status)
                 .build();
-
         dishMapper.update(dish);
     }
 
     /**
-     * 根据id查询菜品详情
-     * @param id 菜品id
+     * 根据ID查询菜品详情
+     *
+     * @param dishId 菜品ID
      * @return 菜品详情（含分类名称和口味列表）
      */
     @Override
-    public DishGetByIdVO getById(Long id) {
-        log.info("根据id查询菜品: {}", id);
-
-        return dishMapper.getById(id);
+    public DishGetByIdVO getById(Long dishId) {
+        log.info("根据id查询菜品: {}", dishId);
+        return dishMapper.getById(dishId);
     }
 
     /**
      * 新增菜品
-     * @param dto 菜品信息
+     * 事务：菜品和口味同时成功或回滚
+     *
+     * @param insertDTO 菜品信息（含口味列表）
      */
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void save(DishInsertDTO dto) {
-        log.info("新增菜品: {}", dto.getName());
+    public void save(DishInsertDTO insertDTO) {
+        log.info("新增菜品: {}", insertDTO.getName());
 
-        // 1.构造菜品对象，DTO属性拷贝到实体
+        // 1. DTO → Entity
         Dish dish = new Dish();
-        BeanUtils.copyProperties(dto, dish);
+        BeanUtils.copyProperties(insertDTO, dish);
         dish.setStatus(StatusConstant.DISABLE);
-        // 2.调用mapper新增菜品（自动填充创建/更新时间、操作人，返回自增主键）
+
+        // 2. 新增菜品（自动填充审计字段，返回自增主键）
         dishMapper.save(dish);
 
-        // 3.获取自增主键，设置到口味中一并保存
+        // 3. 获取自增主键，保存口味列表
         Long dishId = dish.getId();
-        List<DishFlavor> dishFlavorList = dto.getFlavors();
-        if (!CollectionUtils.isEmpty(dishFlavorList)) {
-            dishFlavorList.forEach(d -> d.setDishId(dishId));
-            dishFlavorMapper.save(dishFlavorList);
+        List<DishFlavor> flavorList = insertDTO.getFlavors();
+        if (!CollectionUtils.isEmpty(flavorList)) {
+            flavorList.forEach(flavor -> flavor.setDishId(dishId));
+            dishFlavorMapper.save(flavorList);
         }
     }
 
     /**
      * 修改菜品
-     * @param dto 菜品信息
+     * 事务：先删旧口味，再插入新口味
+     *
+     * @param updateDTO 菜品信息（含口味列表）
      */
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void update(DishUpdateDTO dto) {
-        log.info("修改菜品: {}", dto.getId());
+    public void update(DishUpdateDTO updateDTO) {
+        log.info("修改菜品: {}", updateDTO.getId());
 
-        // 1.DTO属性拷贝到实体
-        Long dishId = dto.getId();
+        Long dishId = updateDTO.getId();
+
+        // 1. 更新菜品基本信息
         Dish dish = new Dish();
-        BeanUtils.copyProperties(dto, dish);
-
-        // 2.更新菜品基本信息（自动填充更新时间、操作人）
+        BeanUtils.copyProperties(updateDTO, dish);
         dishMapper.update(dish);
 
-        // 3.删除原口味，重新插入新口味
+        // 2. 删除旧口味，插入新口味
         dishFlavorMapper.deleteByIds(List.of(dishId));
-        List<DishFlavor> dishFlavorList = dto.getFlavors();
-        if (!CollectionUtils.isEmpty(dishFlavorList)) {
-            dishFlavorList.forEach(d -> d.setDishId(dishId));
-            dishFlavorMapper.save(dishFlavorList);
+        List<DishFlavor> flavorList = updateDTO.getFlavors();
+        if (!CollectionUtils.isEmpty(flavorList)) {
+            flavorList.forEach(flavor -> flavor.setDishId(dishId));
+            dishFlavorMapper.save(flavorList);
         }
     }
 
     /**
      * 批量删除菜品
-     * @param ids 菜品id集合
+     * 事务：菜品和口味同时删除
+     *
+     * @param dishIds 菜品ID集合
      */
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void deleteByIds(List<Long> ids) {
-        log.info("批量删除菜品: {}", ids);
+    public void deleteByIds(List<Long> dishIds) {
+        log.info("批量删除菜品: {}", dishIds);
+        dishMapper.deleteByIds(dishIds);
+        dishFlavorMapper.deleteByIds(dishIds);
+    }
 
-        dishMapper.deleteByIds(ids);
-
-        dishFlavorMapper.deleteByIds(ids);
+    /**
+     * 根据分类ID查询菜品列表
+     *
+     * @param categoryId 分类ID
+     * @return 菜品列表
+     */
+    @Override
+    public List<Dish> getByCategoryId(Long categoryId) {
+        log.info("根据分类id查询菜品: {}", categoryId);
+        return dishMapper.getByCategoryId(categoryId);
     }
 }

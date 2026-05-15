@@ -11,35 +11,47 @@ import java.time.LocalDateTime;
 
 /**
  * 菜品实体类
+ * 对应数据库dish表，存储菜品基本信息
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class Dish implements Serializable {
-    // serialVersionUID — 序列化版本号，用于反序列化时校验版本一致性
+
     @Serial
     private static final long serialVersionUID = 1L;
-    // 主键
+
+    // 主键ID（数据库自增）
     private Long id;
+
     // 菜品名称
     private String name;
-    // 分类id
+
+    // 所属分类ID（关联category.id）
     private Long categoryId;
-    // 价格
+
+    // 菜品价格（单位：元）
     private double price;
-    // 图片路径
+
+    // 菜品图片URL
     private String image;
-    // 描述
+
+    // 菜品描述
     private String description;
-    // 状态（1启售，0停售）
+
+    // 上架状态（1:启售 0:停售）
     private Integer status;
-    // 创建时间
+
+    // 记录创建时间（自动填充）
     private LocalDateTime createTime;
-    // 更新时间
+
+    // 记录最后更新时间（自动填充）
     private LocalDateTime updateTime;
-    // 创建人id
+
+    // 创建人ID（关联employee.id）
     private Long createUser;
-    // 更新人id
+
+    // 最后更新人ID（关联employee.id）
     private Long updateUser;
 }
