@@ -50,7 +50,7 @@ public class CategoryController {
     @GetMapping("/page")
     @Operation(summary = "分页查询分类")
     public Result<PageResult<Category>> page(CategoryQueryDTO dto) {
-        log.info("分页查询分类,查询参数:{}", dto);
+        log.info("分页查询分类,查询参数: {}", dto);
 
         PageResult<Category> pageResult = categoryService.page(dto);
 
@@ -79,7 +79,7 @@ public class CategoryController {
     @PostMapping("/status/{status}")
     @Operation(summary = "修改分类状态")
     public Result startOrStop(@PathVariable Integer status, Long id) {
-        log.info("修改分类状态,id:{},状态:{}", id, status);
+        log.info("修改分类状态,id: {},状态: {}", id, status);
 
         categoryService.startOrStop(id, status);
 
@@ -100,9 +100,18 @@ public class CategoryController {
         return Result.success();
     }
 
+    /**
+     * 根据类型查询分类列表
+     * @param type 类型（1菜品分类，2套餐分类）
+     * @return 分类列表
+     */
     @GetMapping("/list")
+    @Operation(summary = "根据类型查询分类列表")
     public Result<List<Category>> getByTypes(Integer type) {
+        log.info("根据类型查询分类: {}", type);
+
         List<Category> categoryList = categoryService.getByTypes(type);
+
         return Result.success(categoryList);
     }
 }

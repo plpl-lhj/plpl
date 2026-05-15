@@ -98,7 +98,7 @@ public class EmployeeController {
     @PostMapping
     @Operation(summary = "新增员工")
     public Result save(@RequestBody EmployeeInsertDTO dto) {
-        log.info("新增员工:{}", dto.getUsername());
+        log.info("新增员工: {}", dto.getUsername());
 
         employeeService.save(dto);
 
@@ -113,7 +113,7 @@ public class EmployeeController {
     @GetMapping("/page")
     @Operation(summary = "分页查询员工")
     public Result<PageResult<EmployeeVO>> page(EmployeeQueryDTO dto) {
-        log.info("分页查询员工,查询参数:{}", dto);
+        log.info("分页查询员工,查询参数: {}", dto);
 
         PageResult<EmployeeVO> pageResult = employeeService.page(dto);
 
@@ -128,7 +128,7 @@ public class EmployeeController {
     @PostMapping("/status/{status}")
     @Operation(summary = "修改员工账号状态")
     public Result startOrStop(@PathVariable Integer status, Long id) {
-        log.info("修改员工账号状态,id:{},状态:{}", id, status);
+        log.info("修改员工账号状态,id: {},状态: {}", id, status);
 
         employeeService.startOrStop(id, status);
 
@@ -143,7 +143,7 @@ public class EmployeeController {
     @GetMapping("/{id}")
     @Operation(summary = "根据id查询员工")
     public Result<EmployeeVO> getById(@PathVariable Long id) {
-        log.info("根据id查询员工:{}", id);
+        log.info("根据id查询员工: {}", id);
 
         EmployeeVO employeeVO = employeeService.getById(id);
 
@@ -157,7 +157,7 @@ public class EmployeeController {
     @PutMapping
     @Operation(summary = "修改员工信息")
     public Result update(@RequestBody EmployeeUpdateDTO dto) {
-        log.info("修改员工:{}", dto.getId());
+        log.info("修改员工: {}", dto.getId());
 
         employeeService.update(dto);
 

@@ -11,9 +11,8 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "sky.jwt")
 @Data
-
 public class JwtProperties {
-    // 管理端员工生成jwt令牌相关配置
+    // 1.管理端员工生成jwt令牌相关配置
     // jwt签名加密时使用的秘钥
     private String adminSecretKey;
     // jwt过期时间(毫秒)

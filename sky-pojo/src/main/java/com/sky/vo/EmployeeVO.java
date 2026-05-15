@@ -23,8 +23,8 @@ public class EmployeeVO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    // 主键值
-    @Schema(description = "主键值")
+    // 用户id
+    @Schema(description = "用户id")
     private Long id;
 
     // 用户名

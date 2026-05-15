@@ -54,7 +54,7 @@ public class CategoryServiceImpl implements CategoryService {
      */
     @Override
     public PageResult<Category> page(CategoryQueryDTO dto) {
-        log.info("分页查询分类,查询参数:{}", dto);
+        log.info("分页查询分类,查询参数: {}", dto);
 
         // 1.PageHelper.startPage() 必须紧挨着Mapper查询方法
         PageHelper.startPage(dto.getPage(), dto.getPageSize());
@@ -114,8 +114,15 @@ public class CategoryServiceImpl implements CategoryService {
         categoryMapper.update(category);
     }
 
+    /**
+     * 根据类型查询分类列表
+     * @param type 类型（1菜品分类，2套餐分类）
+     * @return 分类列表
+     */
     @Override
     public List<Category> getByTypes(Integer type) {
+        log.info("根据类型查询分类列表: {}", type);
+
         return categoryMapper.getByTypes(type);
     }
 }

@@ -7,7 +7,6 @@ import java.io.Serializable;
 
 /**
  * 新增员工时传递的数据模型
- * DTO：Data Transfer Object，数据传输对象，用于接收客户端传递的数据
  */
 @Data
 @Schema(description = "新增员工时传递的数据模型")

@@ -20,13 +20,12 @@ import java.time.LocalDateTime;
  * 自动填充切面
  * @Aspect — 声明该类是一个切面，Spring AOP会自动扫描并处理
  *           切面 = 切入点(Pointcut) + 通知(Advice)
- * @Component — 将该类标记为Spring组件，被扫描并注册到容器中
  *
  * 作用：在Mapper执行insert/update之前，自动注入当前时间和操作人id
  *       避免在每个Service实现类中重复编写审计字段赋值代码
  */
-@Aspect
 @Component
+@Aspect
 @Slf4j
 public class AutoFillAspect {
 

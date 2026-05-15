@@ -44,5 +44,10 @@ public interface CategoryService {
      */
     void update(CategoryUpdateDTO dto);
 
+    /**
+     * 根据类型查询分类列表
+     * @param type 类型（1菜品分类，2套餐分类）
+     * @return 分类列表
+     */
     List<Category> getByTypes(Integer type);
 }

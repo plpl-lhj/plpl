@@ -47,3 +47,17 @@ sky:
     admin-ttl: 7200000
     # 设置前端传递过来的令牌名称
     admin-token-name: token
+
+aliyun:
+  oss:
+    # OSS服务端点（地域节点）
+    # 格式: https://oss-地域.aliyuncs.com
+    # cn-beijing = 北京区域
+    endpoint: https://oss-cn-beijing.aliyuncs.com
+
+    # OSS存储桶名称
+    # 每个bucket是独立的存储空间
+    bucketName: plpl-oss
+
+    # 地域ID（与endpoint对应）
+    region: cn-beijing

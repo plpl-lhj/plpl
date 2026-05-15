@@ -62,7 +62,8 @@
         <argon2.version>2.11</argon2.version>
         <!-- PageHelper版本 - MyBatis分页插件 -->
         <pagehelper.version>2.1.0</pagehelper.version>
-        <aspectj.vesion>1.9.22.1</aspectj.vesion>
+        <!-- 阿里云OSS版本 - 文件存储 -->
+        <aliyun.oss.version>3.17.4</aliyun.oss.version>
     </properties>
 
     <!--
@@ -158,6 +159,16 @@
                 <groupId>org.aspectj</groupId>
                 <artifactId>aspectjweaver</artifactId>
                 <version>${aspectj.version}</version>
+            </dependency>
+
+            <!--
+                阿里云OSS SDK - 文件存储服务
+                用于：上传图片、文件到阿里云对象存储
+            -->
+            <dependency>
+                <groupId>com.aliyun.oss</groupId>
+                <artifactId>aliyun-sdk-oss</artifactId>
+                <version>${aliyun.oss.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

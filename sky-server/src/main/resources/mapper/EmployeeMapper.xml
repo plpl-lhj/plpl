@@ -36,7 +36,7 @@
         SELECT * FROM employee
         <where>
             <if test="name != null and name != ''">
-                name like concat('%', #{name}, '%')
+                name LIKE CONCAT('%', #{name}, '%')
             </if>
         </where>
         ORDER BY update_time DESC
@@ -88,6 +88,7 @@
         WHERE id = #{id}
     </update>
 
+        <!-- 根据id查询员工 -->
     <select id="getById" resultType="Employee">
         SELECT * FROM employee WHERE id = #{id}
     </select>
